@@ -3,7 +3,7 @@ import asyncio
 from typing import AsyncIterable, Dict, List, Optional
 from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI  # Importation mise à jour
 from langchain.schema import Document
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
@@ -25,7 +25,9 @@ class RAGChain:
         if os.path.exists(self.vector_store_path) and not documents:
             # Load existing vector store
             self.vector_store = FAISS.load_local(
-                self.vector_store_path, self.embeddings
+                self.vector_store_path, 
+                self.embeddings,
+                allow_dangerous_deserialization=True
             )
         elif documents:
             # Create new vector store from documents
@@ -46,8 +48,8 @@ class RAGChain:
         """Create the RAG chain with streaming capabilities."""
         # Create the language model with streaming
         llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo",
-            temperature=0,
+            model_name="gpt-4o-mini",
+            temperature=0.3,
             streaming=True,
             callbacks=[StreamingCallbackHandler(streaming_queue)]
         )

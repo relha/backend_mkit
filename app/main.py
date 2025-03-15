@@ -11,6 +11,7 @@ from .rag_chain import RAGChain
 
 # Load environment variables
 load_dotenv()
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 # Initialize FastAPI app
 app = FastAPI(title="RAG API with Streaming")
